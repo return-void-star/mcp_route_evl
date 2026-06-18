@@ -1,5 +1,7 @@
 import os
 import hashlib
+import time
+
 from sentence_transformers import SentenceTransformer
 from database import get_conn
 import re
@@ -61,14 +63,22 @@ def run_indexer(path):
                 query="INSERT INTO docs(file_path,parent_folder,file_extension,file_hash) VALUES(?,?,?,?)"
                 cursor.execute(query,(p,p_parent_path,p_extension,final_hash))
                 chun_thres=0.6 # chunking threshold; can we make it dynamic??
-                text_chunked,chunk_embed=sem_chunking(model,text,chun_thres)
-
+                text_chunked,chunk_embed=sem_chunking(model,text,chun_thres) #semantic chunking
+                p_docs_id=cursor.lastrowid
+                query="INSERT INTO chunks(doc_id,chunk_text,chunk_index,vector) VALUES(?,?,?,?)"
+                for i,vec in enumerate(chunk_embed):
+                    cursor.execute(query,(p_docs_id," ".join(text_chunked[i]),i,vec.astype("float32").tobytes()))
             temp_conn.commit()
-
-
-
-
     else:
         print(f"{path} is not a valid directory")
         return
-model=SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+if __name__=="__main__":
+    start_time=time.perf_counter()
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    indexing_start_time=time.perf_counter()
+    run_indexer("data")
+    end_time=time.perf_counter()
+    print("Indexing complete, total time:", (end_time-start_time), "indexer time:",(end_time-indexing_start_time))
+else:
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
