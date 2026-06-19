@@ -23,10 +23,11 @@ def run_retrieval():
                 max_sim=similarity
                 best_string=row[1]
                 best_path=row[0]
-        print("\n--- Best Local Match ---")
-        print(f"File Source: {best_path}")
-        print(f"Similarity Score: {max_sim:.4f}")
-        print(f"Content: {best_string}\n")
+    return max_sim,best_string,best_path
+        #print("\n--- Best Local Match ---")
+        #print(f"File Source: {best_path}")
+        #print(f"Similarity Score: {max_sim:.4f}")
+        #print(f"Content: {best_string}\n")
 
 if __name__=="__main__":
     run_retrieval()
