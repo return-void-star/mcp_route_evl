@@ -10,7 +10,7 @@ def sigmoid_func(z):
     return 1/(1+np.exp(-np.clip(z,-400,400)))
 queries=[]
 labels=[]
-with open("data/router_queries.csv","r") as file:
+with open("router_queries.csv", "r") as file:
     reader=csv.reader(file)
     header=next(reader)
     for row in reader:
@@ -42,8 +42,9 @@ while(iterations):
 model_train_finish_time=perf_counter()
 test_queries=[]
 test_labels=[]
+np.savez("router_weights.npz",w=weights,b=bias)
 
-with open("data/router_test_queries.csv","r") as file:
+with open("router_test_queries.csv", "r") as file:
     reader=csv.reader(file)
     header=next(reader)
     for row in reader:

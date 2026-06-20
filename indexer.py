@@ -1,16 +1,13 @@
 import os
 import hashlib
 import time
-
 from sentence_transformers import SentenceTransformer
 from database import get_conn
 import re
 import numpy as np
 def split_sent(string:str)->list:
-    sentence_end = re.compile(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s')
-    sentences=sentence_end.split(string)
-
-    return [s.strip() for s in sentences if s.strip()]
+    chunks = re.split(r'\n\s*\n|(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s', string)
+    return [c.strip() for c in chunks if c.strip()]
 def sem_chunking(model:SentenceTransformer,temp,threshold):
     temp=split_sent(temp)
     temp_embed_list=model.encode(temp)
