@@ -1,4 +1,4 @@
-from database import get_conn
+from v1.database import get_conn
 from indexer import model
 import numpy as np
 def get_query():

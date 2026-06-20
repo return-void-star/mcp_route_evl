@@ -1,6 +1,6 @@
 import os
 import numpy as np
-weights_path="router_weights.npz"
+weights_path= "router_weights.npz"
 if not os.path.exists(weights_path):
     raise FileNotFoundError("Weights file not found. Run train_router.py first")
 data=np.load(weights_path)

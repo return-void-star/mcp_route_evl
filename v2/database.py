@@ -1,6 +1,6 @@
 import sqlite3
 from contextlib import contextmanager
-DB_PATH="test.db"
+DB_PATH= "v2_db.db"
 
 @contextmanager
 def get_conn():

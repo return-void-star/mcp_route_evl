@@ -2,7 +2,7 @@ import os
 import hashlib
 import time
 from sentence_transformers import SentenceTransformer
-from database import get_conn
+from v1.database import get_conn
 import re
 import numpy as np
 def split_sent(string:str)->list:
@@ -15,7 +15,13 @@ def sem_chunking(model:SentenceTransformer,temp,threshold):
     split_arr=[i+1 for i in range(len(similarity_scores)) if similarity_scores[i]<threshold]
     temp_embed_list=np.split(temp_embed_list,split_arr)
     temp_chunked=np.split(temp,split_arr)
-    chun_vec=[np.mean(x,axis=0) for x in temp_embed_list]
+    chun_vec=[]
+    for x in temp_embed_list:
+        mean_vec=np.mean(x,axis=0)
+        norm=np.linalg.norm(mean_vec)
+        if(norm>0):
+            mean_vec=mean_vec/norm
+        chun_vec.append(mean_vec)
     return temp_chunked,chun_vec
 
 def crawler(path):
@@ -74,7 +80,7 @@ if __name__=="__main__":
     start_time=time.perf_counter()
     model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     indexing_start_time=time.perf_counter()
-    run_indexer("data")
+    run_indexer("../data")
     end_time=time.perf_counter()
     print("Indexing complete, total time:", (end_time-start_time), "indexer time:",(end_time-indexing_start_time))
 else:
