@@ -1,0 +1,6 @@
+--- PM BRAINSTORMING: Q3 FEATURE IDEAS ---
+thoughts on gen-AI features:
+- compare our search latency with competitors. We need to reduce index time to < 1.5s.
+- we need to analyze why customers churn in month 2. is it onboarding friction?
+- check legal-counsel@company.com about customer data privacy when using the OpenAI API.
+- design look and feel: let's evaluate if dark mode is preferred for the sales playbook dashboard.

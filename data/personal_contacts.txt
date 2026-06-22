@@ -1,0 +1,28 @@
+Personal Contacts Directory
+
+Family:
+
+- Mom (Mary Lincoln)
+  Phone: +1 (555) 019-2831
+  Email: mary.linc@gmail.com
+  Address: 456 Elm St, Springfield, IL
+
+- Uncle Dave
+  Phone: +1 (555) 014-9843
+  Email: dave.woodland@yahoo.com
+
+Work Contacts:
+
+- Sarah Jenkins (Project Manager)
+  Phone: +1 (555) 017-8822
+  Email: sjenkins@enterprise.com
+
+- John Miller (DevOps Engineer)
+  Phone: +1 (555) 012-3344
+  Email: jmiller@enterprise.com
+
+Emergency:
+
+- Local Springfield Police Dept (Non-Emergency): +1 (555) 019-9000
+
+- Springfield General Hospital: +1 (555) 011-2233

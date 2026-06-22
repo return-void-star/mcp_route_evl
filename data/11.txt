@@ -1,0 +1,6 @@
+--- WORK SCRATCHPAD (Sarah C.) ---
+notes for today:
+- staging db is acting up again. password is same: StageDB_Access_2026. user is admin.
+- deploy hotfix for oauth loop before v2 goes live next tuesday.
+- reminder: ping john about navan flight approvals.
+- wifi access in lunchroom is sketchy. SSID is Corporate-Staff-Secure, but better to use personal hotspot if doing calls.

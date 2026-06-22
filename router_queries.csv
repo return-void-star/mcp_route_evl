@@ -1,0 +1,571 @@
+query,label
+"Where are the logs?",0
+"staging server IP",0
+"show me config.json",0
+"Who owns the production DB?",0
+"db port",0
+"where is docker-compose.yml?",0
+"what is the staging db name?",0
+"staging server credentials location",0
+"support email contact",0
+"last git commit hash",0
+"find redis.conf",0
+"where is the API key stored?",0
+"show indexer.py",0
+"file path of the database schema",0
+"check server status",0
+"display table list",0
+"list files in data/",0
+"who is the devops engineer?",0
+"location of ssl certificates",0
+"staging deployment logs URL",0
+"what is the version of python we use?",0
+"show dev env setup commands",0
+"list all user roles in system",0
+"database backup path",0
+"who modified the config last?",0
+"where's the frontend code?",0
+"how do i run main.py?",0
+"print environment variables",0
+"check disk usage of server",0
+"get local database size",0
+"find the readme file",0
+"staging server ssh key path",0
+"backend port number?",0
+"who wrote retrieval.py?",0
+"where are the test files?",0
+"staging health check endpoint",0
+"is postgres running?",0
+"current time on server",0
+"check sqlite WAL mode status",0
+"show database migrations",0
+"where is python installed?",0
+"list active docker containers",0
+"backend repo url",0
+"database filename in database.py",0
+"find package.json",0
+"show test.db tables",0
+"search for database connections",0
+"staging redis port",0
+"query size limit in database",0
+"where do we save weights?",0
+"show me git branches",0
+"list all docs",0
+"get doc_id from path",0
+"show chunk_text column",0
+"select file_hash from docs",0
+"check cpu usage",0
+"where are media files?",0
+"read settings.py",0
+"locate error logs",0
+"show config template",0
+"api docs url",0
+"staging server timezone",0
+"check if redis is up",0
+"list schemas",0
+"sqlite file size",0
+"where is indexer logs?",0
+"get row count of docs table",0
+"find indexer.py file path",0
+"show last row inserted in chunks",0
+"staging docker config",0
+"check system memory",0
+"find credentials.env",0
+"show error log file size",0
+"database host name",0
+"local server host url",0
+"list tables in sqlite",0
+"where are model files cached?",0
+"sentence transformer cache directory",0
+"show db structure",0
+"staging api key file",0
+"staging admin password",0
+"find prod url",0
+"who has database access?",0
+"list tables",0
+"show docs schema",0
+"is postgres running locally?",0
+"locate indexer script",0
+"where is .gitignore?",0
+"python version check command",0
+"staging server login",0
+"show doc_id 5",0
+"list all text files",0
+"what folder contains data files?",0
+"staging backend url",0
+"credentials for redis",0
+"get table count",0
+"check git status",0
+"find main.py file",0
+"show docs table columns",0
+"where do I put new documents?",0
+"last indexed document",0
+"list of docs in database",0
+"select * from docs limit 5;",0
+"check port 5432 status",0
+"path to sqlite database",0
+"docker compose file location",0
+"locate retrieval module",0
+"find database.py",0
+"read config settings",0
+"staging dev environment logs",0
+"check disk space on staging",0
+"where are the sentence embeddings stored?",0
+"how to run indexing?",0
+"print database connection string",0
+"who is the db administrator?",0
+"find test.db path",0
+"check local environment setup",0
+"staging server ssh command",0
+"show error log path",0
+"show tables in database",0
+"select file_path from docs where id = 1",0
+"who created indexer.py?",0
+"where is python cache?",0
+"show git logs",0
+"locate indexer.py on disk",0
+"is redis service running?",0
+"current system time",0
+"where do we store weights?",0
+"check sqlite journal mode",0
+"what model do we use?",0
+"check memory usage of server",0
+"staging api token",0
+"list schemas of DB",0
+"read database.py line 10",0
+"find setup instructions",0
+"staging server location",0
+"last run time of indexer",0
+"list files in workspace",0
+"show indexing metrics",0
+"who has access to staging?",0
+"how to test retrieval?",0
+"find settings.json",0
+"locate backup folder",0
+"database user list",0
+"docker service check",0
+"find env file",0
+"show chunks schema",0
+"get total chunks count",0
+"select count(*) from chunks;",0
+"check database file size",0
+"where is sqlite installed?",0
+"show git branch names",0
+"locate docker configuration",0
+"check backend health check",0
+"database port staging",0
+"config.yaml file path",0
+"find package-lock.json",0
+"staging domain name",0
+"check network status",0
+"is test.db locked?",0
+"how to start dev server?",0
+"list files in parent folder",0
+"get doc details by id",0
+"select chunk_text from chunks limit 10",0
+"check cpu temperature",0
+"locate requirements.txt",0
+"show project folder tree",0
+"check sqlite driver version",0
+"where is database backup?",0
+"staging server RAM size",0
+"show current branch",0
+"list active processes",0
+"find package.json file path",0
+"select file_extension from docs",0
+"check folder permissions",0
+"locate env template file",0
+"show doc parent_folder value",0
+"get active connections list",0
+"sqlite version check command",0
+"staging database backup time",0
+"check node version",0
+"read indexer.py lines 1-20",0
+"locate main.py directory",0
+"check system architecture",0
+"show table columns description",0
+"find credentials directory",0
+"staging redis host name",0
+"check background tasks list",0
+"find config subdirectory",0
+"database size on disk",0
+"where is sqlite3 CLI?",0
+"show git commit author",0
+"locate docker folder",0
+"check postgres service status",0
+"show database connection pool size",0
+"where are test logs stored?",0
+"list files matching *.py",0
+"check local host configuration",0
+"show list of schemas in test.db",0
+"staging API port number",0
+"locate model cache folder",0
+"read environment configs",0
+"get last updated file path",0
+"show docs count",0
+"locate indexing script log",0
+"check docker status on staging",0
+"find database configuration settings",0
+"show active user list",0
+"where is model.encode defined?",0
+"check test suite pass rate",0
+"database engine name",0
+"local git tags",0
+"staging server host",0
+"where is indexer.py stored?",0
+"what is the file format of doc table?",0
+"who wrote main.py?",0
+"sqlite file location",0
+"list all markdown documents",0
+"check if docker is installed",0
+"backend container status",0
+"staging cache directory",0
+"where do we save the model?",0
+"list db fields",0
+"show chunks schema table",0
+"find retrieval.py file",0
+"read lines 10 to 20 of indexer.py",0
+"show parent_folder column value",0
+"what is python path?",0
+"database table list check",0
+"find readme.md file path",0
+"select text from docs limit 1",0
+"staging credentials file path",0
+"database schema image location",0
+"docker version details",0
+"is postgres running on port 5432?",0
+"check active db connections",0
+"list directories in project",0
+"staging server uptime",0
+"check available disk space",0
+"find requirements file path",0
+"list active docker logs",0
+"what is sentence transformer model cache?",0
+"show table definitions for test.db",0
+"select vector from chunks limit 1",0
+"staging health check route url",0
+"find package.json path",0
+"database file name config",0
+"check git commits today",0
+"who edited retrieval.py last?",0
+"where do we write router weights?",0
+"check system CPU usage rate",0
+"list environment configuration keys",0
+"staging api server url",0
+"read settings.py config",0
+"where are test fixtures located?",0
+"check redis connection status",0
+"find staging config file",0
+"python environment path info",0
+"list table indexes",0
+"select count(*) from docs;",0
+"check sqlite database page size",0
+"find docker-compose config",0
+"show last git merge commit",0
+"locate main script file",0
+"is staging server online?",0
+"database driver details",0
+"show test.db index names",0
+"staging key file permissions",0
+"find log file directory",0
+"select parent_folder from docs where id=2",0
+"who created database.py?",0
+"locate package-lock.json",0
+"check npm version installed",0
+"read indexer.py lines 30-50",0
+"locate test suite folder",0
+"show system memory usage MB",0
+"find app config file path",0
+"database username list",0
+"check docker network status",0
+"is test.db writable?",0
+"how to test retrieval performance?",0
+"find dev config yaml",0
+"locate archived docs folder",0
+"select file_hash from docs limit 10",0
+"check system temperature status",0
+"locate config directory path",0
+"show project folders structure",0
+"check sqlite extension support",0
+"where is staging data folder?",0
+"show current git branch name",0
+"list background tasks status",0
+"find main.py entry point file",0
+"select file_path from docs where parent_folder='data'",0
+"check local filesystem speed",0
+"where is python cache folder?",0
+"show git tag details",0
+"locate database.py module",0
+"is redis service running locally?",0
+"current timezone on server",0
+"where do we load router weights?",0
+"check sqlite auto_vacuum status",0
+"what model dimensions are we using?",0
+"check memory footprint of python process",0
+"staging token string",0
+"list schemas in sqlite db",0
+"read indexer.py line 40",0
+"find install instructions text",0
+"staging host ip address",0
+"last execution time of indexer script",0
+"list files in data directory",0
+"How do we handle database locks in sqlite3 when writing from multiple processes?",1
+"Explain the difference between sentence splitting using regex versus NLTK.",1
+"Compare SQLite WAL mode performance to standard journal mode.",1
+"Why is my memory usage spiking during semantic chunking of 100MB files?",1
+"Write a python function to compute cosine similarity between two matrices of vectors.",1
+"How can we implement a dynamic similarity threshold based on query length?",1
+"Explain how indexer.py avoids duplicate vector database entries.",1
+"Draft an email explaining why our local model is safer than OpenAI API.",1
+"How to write a robust clean up script for cascade deletes in our SQLite schema?",1
+"What are the architectural differences between a single neuron and a multi-layer perceptron?",1
+"Why do we convert numpy vectors to float32 bytes when storing in SQLite?",1
+"How to design a retry mechanism for failed cloud API route escalations?",1
+"Explain how we can use PCA to reduce MiniLM dimensions from 384 to 32.",1
+"Write a bash script to automate indexing and retrieval testing.",1
+"How to prevent SQL injection in custom search queries without using parameter binding?",1
+"Compare the pros and cons of cosine similarity vs dot product for normalized vectors.",1
+"How do we handle out-of-vocabulary terms in SBERT models?",1
+"Explain the semantic gap between keyword search and dense vector search.",1
+"How should we scale the local database to handle 10 million chunks?",1
+"Explain why a single-neuron classifier might fail if the classes are not linearly separable.",1
+"How do we implement a rolling window chunking strategy?",1
+"Write a python script to run a grid search over SBERT model hyper-parameters.",1
+"How to profile CPU vs GPU inference times for MiniLM on macOS?",1
+"What is the best way to handle document updates without re-indexing unchanged paragraphs?",1
+"How do we evaluate the precision and recall of our hybrid router?",1
+"Explain the math behind the sigmoid activation function and its derivative.",1
+"How to write a custom SQLite user-defined function for cosine similarity in Python?",1
+"Design a high-availability fallback architecture for when local DB is corrupted.",1
+"Explain the role of L2 regularization in logistic regression and how to tune lambda.",1
+"How can we dynamically train the router weights on the fly using user feedback?",1
+"Compare the memory footprint of float32, float16, and binary quantization for vectors.",1
+"Write a custom neural network training loop in pure Python without NumPy.",1
+"Explain how SBERT's contrastive learning works during pre-training.",1
+"How do we handle multilingual queries in a monolingual English index?",1
+"Design an orchestrator that runs local search and falls back to cloud only when confidence is low.",1
+"How does SQLite WAL mode handle concurrent readers and a single writer?",1
+"Explain how the cascade delete works when a doc is deleted from the docs table.",1
+"Write a python function to chunk code files (like python or js) instead of raw text.",1
+"Why does the MiniLM model encode queries faster than indexing files?",1
+"How to handle very long queries that exceed the token limit of MiniLM?",1
+"Explain the geometric interpretation of the bias term in a support vector machine.",1
+"Compare L1 (Lasso) vs L2 (Ridge) regularization for our classifier.",1
+"How can we run local LLM inference on mac using MLX?",1
+"Write a parser to extract metadata from markdown frontmatter.",1
+"How to debug sqlite3.OperationalError: database is locked in production?",1
+"Explain the bias-variance trade-off in the context of our 384D classifier.",1
+"How do we implement cross-validation for a small dataset of 120 queries?",1
+"Design a caching layer for query vectors to avoid SBERT re-encoding.",1
+"Explain the concept of semantic drift in long documents.",1
+"Write a python generator that yields batches of query vectors for SGD.",1
+"How to implement mini-batch gradient descent with momentum for the router?",1
+"Explain why we normalized vectors before storing them in the db.",1
+"What are the security risks of letting an agent run terminal commands directly?",1
+"Design an evaluation suite to measure routing latency vs accuracy.",1
+"How to implement a soft margin classifier in NumPy?",1
+"Explain the backpropagation algorithm for a two-layer neural network.",1
+"Why does gradient descent converge slowly when features have very different scales?",1
+"How to handle class imbalance in our training query dataset?",1
+"Write a clean script to generate training dataset templates programmatically.",1
+"How do we define 'complexity' of a query in a quantitative way?",1
+"Explain how to setup a local HuggingFace cache directory.",1
+"Compare the performance of SQLite's FTS5 with SBERT semantic search.",1
+"How to write a unit test for database transaction safety in python?",1
+"Explain how batching inputs to SBERT improves GPU utilization.",1
+"How do we handle queries that contain a mix of code snippet and natural language?",1
+"Design a local feedback UI where users click 'upvote' or 'downvote' for router decisions.",1
+"Explain the math behind binary cross entropy loss.",1
+"How to compute the gradient of sigmoid with respect to its input?",1
+"Write a python script to monitor SQLite database WAL file size.",1
+"How to use local LLM to generate synthetic training queries for our router?",1
+"Explain the difference between dot product and cosine distance.",1
+"How do we deploy the SBERT model as a lightweight local API service?",1
+"Compare PyTorch, TensorFlow, and NumPy for building custom models locally.",1
+"How to handle punctuation and special characters in query preprocessing?",1
+"Explain how the hashing function prevents re-indexing unmodified documents.",1
+"How to write an optimized bulk insert query for sqlite3 in Python?",1
+"Design a custom tokenizer for programming language source code.",1
+"Explain the vanishing gradient problem in deep neural networks.",1
+"How do we build a hierarchical index for multi-document retrieval?",1
+"Write a python script to clean up orphaned chunks in the database.",1
+"How to design a multi-tenant database schema using a single SQLite database?",1
+"Compare the execution speed of NumPy vector operations with standard Python loops.",1
+"Explain how we can use binary vector quantization to reduce search index size by 90%.",1
+"Write a Python script to dynamically adjust the sentence splitting threshold based on document length.",1
+"Why is my SQLite database throwing a 'database is locked' exception during concurrent indexing?",1
+"Draft a proposal for replacing SBERT with a local cross-encoder model to improve search precision.",1
+"Explain the difference between dense vector retrieval and sparse vector retrieval like BM25.",1
+"How to implement a hierarchical navgation structure on top of semantic document chunks?",1
+"Explain the math behind cosine similarity and why vector normalization simplifies the calculation.",1
+"How to write a robust error handling decorator in Python for database transaction rollbacks?",1
+"What are the pros and cons of using a single-neuron classifier versus a random forest for routing?",1
+"Write a Python class that implements early stopping for gradient descent on a customized cost function.",1
+"Explain why SBERT embeddings of code files perform poorly compared to text files and how to fix it.",1
+"How to design a caching system for sentence embeddings that uses an LRU eviction policy?",1
+"Compare the performance of SQLite WAL mode with memory-mapped I/O enabled vs disabled.",1
+"Why does the sigmoid function saturate and how does that affect gradient descent convergence?",1
+"Write a function that splits a document into overlapping chunks while preserving code block integrity.",1
+"How to implement a soft-voting ensemble classifier using two independent local models?",1
+"Explain the concept of semantic drift and how hierarchical chunking mitigates it.",1
+"How do we measure the recall of our vector search engine without having a gold standard test set?",1
+"Write a NumPy-only implementation of a two-layer Multi-Layer Perceptron with ReLU activation.",1
+"Explain the role of bias in linear classification and what happens if we set it to zero.",1
+"How to configure SQLite to handle 100 concurrent read connections and a single write connection?",1
+"Explain the difference between L1 and L2 regularization in terms of weight sparsity.",1
+"How to write a benchmark script to measure query latency under different load levels?",1
+"Design a system to dynamically update SBERT embeddings when a document is partially edited.",1
+"Explain why SBERT models require a GPU for efficient indexing but run fine on CPU for retrieval.",1
+"How to implement a local fallback mechanism that queries a cloud API when similarity score is low?",1
+"Compare using SQLite's FTS5 engine with dense vector search for hybrid retrieval.",1
+"Write a Python script to parse PDF files and clean up headers and footers before indexing.",1
+"Explain how contrastive learning is used to pre-train sentence transformer models.",1
+"How to debug a memory leak in a long-running Python background process that uses PyTorch?",1
+"Design an evaluation metrics framework to measure the latency vs accuracy trade-off of our router.",1
+"Explain the vanishing gradient problem in deep networks and why it doesn't affect our single neuron.",1
+"How to build a custom tokenizer in Python using regular expressions for code parsing?",1
+"Write a Python script to backup the SQLite database without blocking active write operations.",1
+"Explain the geometric interpretation of a hyperplane separating two classes in a 384D space.",1
+"Compare using an online learning algorithm vs batch training for updating our router weights.",1
+"How to handle document deletes in our database to ensure orphaned chunks are cascade-purged?",1
+"Write a NumPy function to compute the derivative of the binary cross entropy loss.",1
+"Explain why SBERT models are sensitive to word order compared to bag-of-words models.",1
+"How to implement a user feedback loop that automatically logs misclassified routing queries?",1
+"Design a protocol for serializing NumPy float32 arrays into binary BLOBs and back.",1
+"Explain the difference between dot product similarity and Euclidean distance for normalized vectors.",1
+"How to write a recursive directory crawler that respects custom gitignore rules?",1
+"Write a Python function to compute the precision-recall curve for a binary classifier.",1
+"Explain why the MiniLM model is much faster than larger models like MPNet for local deployments.",1
+"How to structure our CLI tool so that it can run as a background service on macOS?",1
+"Design a backup and restore utility for the SQLite vector database.",1
+"Explain the bias-variance trade-off when tuning the L2 regularization lambda parameter.",1
+"How to write a multi-threaded web scraper in Python that cleans HTML before storing?",1
+"Compare the storage efficiency of using raw floats vs binary quantized vectors in SQLite.",1
+"Write a custom neural network layer in Python that performs matrix multiplication.",1
+"Explain how we can use K-Means clustering to discover topics in our indexed document chunks.",1
+"How to design a robust database schema for tracking user queries, route decisions, and feedback?",1
+"Explain the term 'out-of-domain generalization' in the context of our query classifier.",1
+"How to write a script that monitors memory usage of SBERT during bulk indexing?",1
+"Compare the benefits of using a local LLM via llama.cpp vs a cloud API for complex reasoning.",1
+"Write a Python function to extract code blocks from markdown files and classify the language.",1
+"Explain the mathematical relationship between the sigmoid function and logistic loss.",1
+"How to configure a local offline repository for pip packages using wheel files?",1
+"Design an automated system to judge retrieval relevance using a small local LLM.",1
+"Explain why word embeddings cannot capture polysemy (words with multiple meanings).",1
+"How to write a non-blocking database query runner using Python's select module?",1
+"Compare the latency of local SBERT models with HuggingFace Inference API.",1
+"Write a NumPy implementation of AdaGrad optimization algorithm.",1
+"Explain how the sentence transformer handles long-range contextual dependencies.",1
+"How to design a custom distance metric that combines semantic and metadata features?",1
+"Write a Python script to compute accuracy, precision, recall, and F1-score.",1
+"Explain the role of weight decay in preventing neural network weights from exploding.",1
+"How to write an optimized parser for large JSON data dumps in Python?",1
+"Design a custom load balancer for a cluster of SBERT embedding servers.",1
+"Explain the difference between cosine similarity and soft cosine similarity.",1
+"How to write a robust test suite for indexing and retrieval using pytest?",1
+"Compare the performance of Bi-encoders and Cross-encoders for re-ranking.",1
+"Write a Python script to compress the database vectors using product quantization.",1
+"Explain the impact of batch size on the generalization capability of SGD.",1
+"How to implement a learning rate decay schedule based on validation accuracy?",1
+"Design a CLI command that generates a PDF report of retrieval search metrics.",1
+"Explain the concept of structural risk minimization in statistical learning theory.",1
+"How to compile SQLite from source with vector search extensions enabled?",1
+"Compare similarity search performance between FAISS and SQLite.",1
+"Write a Python script to visualize high-dimensional SBERT vectors in 3D using t-SNE.",1
+"Explain how the BPE (Byte Pair Encoding) tokenizer splits rare words.",1
+"How to design a fallback routing model that uses keyword matching when SBERT is unavailable?",1
+"Write a NumPy function to solve linear regression using the normal equation.",1
+"Explain why SBERT embeddings are suitable for zero-shot text classification.",1
+"How to write a script to evaluate the Average Precision (AP) for retrieved docs?",1
+"Compare gradient descent with Newton-Raphson method for optimization.",1
+"Explain the difference between parametric and non-parametric machine learning models.",1
+"How to implement a hierarchical attention network for paragraph representation?",1
+"Compare the retrieval accuracy of dense embeddings vs hybrid dense-sparse search.",1
+"Explain the mechanism of neural network backpropagation using simple chain rule.",1
+"Write a Python script to perform custom sentence boundary detection for medical text.",1
+"Why does the SQLite writer lock block concurrent read transactions in journal mode?",1
+"Draft a technical comparison between MPNet and MiniLM for semantic similarity tasks.",1
+"Explain how we can use locality-sensitive hashing (LSH) to scale vector search.",1
+"How to design a multi-agent system where agents collaborate to solve complex routing?",1
+"Explain the math behind gradient descent with momentum and how it speeds up training.",1
+"How to write a robust rate limiter using a sliding window algorithm in Redis?",1
+"What are the design trade-offs of using a vector database like Milvus vs SQLite?",1
+"Write a Python class to implement K-fold cross-validation from scratch in NumPy.",1
+"Explain why semantic search fails to capture exact word matches and how to hybridize it.",1
+"How to design a distributed message queue using SQLite as the storage engine?",1
+"Compare the computational complexity of training a logistic regression vs a decision tree.",1
+"Why does the Sigmoid activation function suffer from gradient saturation at extremes?",1
+"Write a function that extracts code comments and docstrings from Python source files.",1
+"How to implement a weighted ensemble classifier using SBERT and TF-IDF outputs?",1
+"Explain the concept of covariate shift and how to monitor it in a production router.",1
+"How do we calculate the Mean Reciprocal Rank (MRR) of our search results?",1
+"Write a pure NumPy implementation of the Adam optimizer for neural networks.",1
+"Explain the effect of initializing neural network weights with zero vs random normal.",1
+"How to optimize SQLite parameters for high-throughput write-heavy workloads?",1
+"Explain the difference between early stopping based on training loss vs validation loss.",1
+"How to write a benchmark utility to measure memory allocation during SBERT encoding?",1
+"Design a real-time indexing pipeline that uses a file system watcher in Python.",1
+"Explain why SBERT embeddings are anisotropic and how to perform whitening to fix it.",1
+"How to implement an escalation router that asks the user for confirmation when unsure?",1
+"Compare using SQLite's built-in FTS5 engine with an external Elasticsearch instance.",1
+"Write a Python script to extract tables from PDF documents and convert them to Markdown.",1
+"Explain how triplet loss works in training sentence embeddings models.",1
+"How to profile memory leaks in a Python script using memory_profiler and objgraph?",1
+"Design a test automation framework that runs retrieval validation on every git push.",1
+"Explain why a single-neuron classifier cannot learn the XOR function.",1
+"How to build a custom tokenizer that handles mathematical expressions and LaTeX?",1
+"Write a Python script to encrypt and decrypt the SQLite database file on the fly.",1
+"Explain the geometric interpretation of soft-margin Support Vector Machines.",1
+"Compare offline batch evaluation with online A/B testing for a query router.",1
+"How to handle document schema changes without corrupting existing database vectors?",1
+"Write a NumPy implementation of the cross-entropy loss gradient for multi-class classification.",1
+"Explain why sentence-level vectors are better for QA than paragraph-level vectors.",1
+"How to design a feedback mechanism where the router learns from user corrections dynamically?",1
+"Design a binary serialization format for high-speed SBERT embedding saving.",1
+"Explain the difference between cosine similarity and dot product for unnormalized vectors.",1
+"How to write a directory parser that handles infinite symlink loops safely?",1
+"Write a Python function to plot the ROC curve and calculate the AUC score.",1
+"Explain why SBERT is better than word2vec for understanding sentence semantics.",1
+"How to deploy our terminal AI copilot as a background daemon on macOS?",1
+"Design an incremental backup scheduler for a SQLite vector database.",1
+"Explain the bias-variance trade-off when changing the learning rate of gradient descent.",1
+"How to write a concurrent crawler in Python using the multiprocessing library?",1
+"Compare the memory and CPU usage of SBERT embedding calculations on Apple Silicon.",1
+"Write a custom neural network activation function like GELU in pure Python.",1
+"Explain how to use Hierarchical Navigable Small World (HNSW) graphs for vector indexing.",1
+"How to design a logging database to analyze search queries and escalation rates over time?",1
+"Explain what out-of-distribution (OOD) queries are and how to detect them.",1
+"How to monitor GPU temperature and memory usage during model training?",1
+"Compare the latency and cost of routing to Claude 3.5 Sonnet vs GPT-4o.",1
+"Write a Python script to clean and normalize raw chat logs before semantic chunking.",1
+"Explain the mathematical proof of why logistic regression has a convex loss surface.",1
+"How to configure a local offline repository for pip packages using wheel files?",1
+"Design an automated system to judge retrieval relevance using a small local LLM.",1
+"Explain why word embeddings cannot capture polysemy (words with multiple meanings).",1
+"How to write a non-blocking database query runner using Python's select module?",1
+"Compare the latency of local SBERT models with HuggingFace Inference API.",1
+"Write a NumPy implementation of AdaGrad optimization algorithm.",1
+"Explain how the sentence transformer handles long-range contextual dependencies.",1
+"How to design a custom distance metric that combines semantic and metadata features?",1
+"Write a Python script to compute accuracy, precision, recall, and F1-score.",1
+"Explain the role of weight decay in preventing neural network weights from exploding.",1
+"How to write an optimized parser for large JSON data dumps in Python?",1
+"Design a custom load balancer for a cluster of SBERT embedding servers.",1
+"Explain the difference between cosine similarity and soft cosine similarity.",1
+"How to write a robust test suite for indexing and retrieval using pytest?",1
+"Compare the performance of Bi-encoders and Cross-encoders for re-ranking.",1
+"Write a Python script to compress the database vectors using product quantization.",1
+"Explain the impact of batch size on the generalization capability of SGD.",1
+"How to implement a learning rate decay schedule based on validation accuracy?",1
+"Design a CLI command that generates a PDF report of retrieval search metrics.",1
+"Explain the concept of structural risk minimization in statistical learning theory.",1
+"How to compile SQLite from source with vector search extensions enabled?",1
+"Compare similarity search performance between FAISS and SQLite.",1
+"Write a Python script to visualize high-dimensional SBERT vectors in 3D using t-SNE.",1
+"Explain how the BPE (Byte Pair Encoding) tokenizer splits rare words.",1
+"How to design a fallback routing model that uses keyword matching when SBERT is unavailable?",1
+"Write a NumPy function to solve linear regression using the normal equation.",1
+"Explain why SBERT embeddings are suitable for zero-shot text classification.",1
+"How to write a script to evaluate the Average Precision (AP) for retrieved docs?",1
+"Compare gradient descent with Newton-Raphson method for optimization.",1
+"Explain the difference between parametric and non-parametric machine learning models.",1

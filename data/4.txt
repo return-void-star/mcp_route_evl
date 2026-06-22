@@ -1,0 +1,23 @@
+NEW EMPLOYEE ONBOARDING CHEATSHEET & FAQS
+
+Welcome to the team! Use this cheatsheet to set up your workspace and get connected on your first day.
+
+Office Wifi Credentials
+To connect to the local network:
+Network SSID: "Corporate-Staff-Secure"
+WPA2 Password: "future-is-collaborative"
+Guests should connect to "Corporate-Guest" (no password required, but traffic is monitored).
+
+Communication and Slack Channels
+Our main hub is Slack. Please join the following core channels immediately:
+- #announcements (Read-only corporate news)
+- #general (Watercooler chat)
+- #help-it (Submit IT tickets)
+- #office-life (Facilities and lunch updates)
+
+Software License Setup
+Go to your Okta dashboard to request licenses for:
+- JIRA and Confluence (Productivity)
+- Slack (Communication)
+- Figma (For Design and Product roles)
+- GitHub (For Engineering roles - request access via #eng-infra)

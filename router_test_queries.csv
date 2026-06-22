@@ -1,0 +1,51 @@
+query,label
+"where can I find indexer logs?",0
+"what is the path of database.py?",0
+"staging postgres port number",0
+"show config file directory",0
+"who is database owner?",0
+"check status of local redis",0
+"list active docker containers on staging",0
+"where are the sentence-transformer models cached?",0
+"print all database column names",0
+"find readme in data directory",0
+"staging deploy logs url",0
+"backend health check port",0
+"check current memory usage",0
+"what is sqlite version?",0
+"locate test.db in workspace",0
+"show staging api secret path",0
+"last commit message on git",0
+"list md files in data",0
+"show git current branch info",0
+"where does router save weights?",0
+"check local environment variable list",0
+"staging redis credentials",0
+"read indexer.py line 1",0
+"who created retrieval.py file?",0
+"locate package.json on staging",0
+"Explain why the SQLite database throws locked exception and how to handle it in Python.",1
+"Compare using PCA vs using L2 regularization to prevent model overfitting.",1
+"Write a Python script to verify if the vector database contains duplicate hashes.",1
+"Explain the difference between dense embeddings and sparse representations like TF-IDF.",1
+"How to design a retry logic for cloud router escalation when network is slow?",1
+"Why does the SBERT model output vectors of exactly 384 dimensions?",1
+"Compare the execution speed of dot product in NumPy vs raw SQL query in SQLite.",1
+"Explain how we can implement a custom tokenizer using regular expressions for code.",1
+"Write a Python script to plot validation loss over training epochs.",1
+"How to configure a local fallback router that prompts the user for manual routing?",1
+"Explain the role of the bias term in drawing the decision hyperplane.",1
+"Why does SBERT perform better at capturing sentence similarity than bag-of-words?",1
+"How to write a robust cleanup function that cascade-purges docs and chunks?",1
+"Design a local logging schema to track query routing probability over time.",1
+"Explain how contrastive learning aligns representations of paraphrased text.",1
+"How to optimize sqlite page size and cache size for vector search retrieval?",1
+"Write a function that splits code files by class/function blocks rather than sentences.",1
+"Compare the memory and cpu footprints of MPNet vs MiniLM on Apple Silicon.",1
+"Explain how the BPE tokenizer handles out-of-vocabulary characters.",1
+"Design an automated evaluation pipeline to test precision and recall of the router.",1
+"How to implement a soft margin support vector machine in pure NumPy?",1
+"Explain the bias-variance trade-off when tuning lambda in weight decay.",1
+"Write a Python concurrent reader for SQLite using the multiprocessing library.",1
+"Compare the latency of local sentence transformers vs online embeddings.",1
+"Explain why gradient descent with momentum converges faster than standard SGD.",1

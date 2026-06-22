@@ -1,0 +1,16 @@
+SALES DIVISION: ENTERPRISE PLAYBOOK & DISCOUNTING RULES
+
+This internal playbook outlines the sales pipeline steps, pricing rules, and approval boundaries for software sales.
+
+1. Dealing with Enterprise Pricing
+Our standard list price for the Enterprise SaaS tier is $45 per user per month, billed annually. The Minimum contract size for Enterprise tier is 50 seats ($27,000 ARR). 
+
+2. Discounting Limits and Approval Levels
+Account Executives (AEs) are authorized to offer discounts based on contract length and seat volume:
+- Up to 10% discount: AE discretion (no approval needed).
+- 11% to 20% discount: Requires written approval from the Regional Sales Director.
+- 21% to 35% discount: Requires approval from the VP of Global Sales.
+- Anything above 35%: Requires sign-off from the CFO.
+
+3. Client Onboarding Hand-off
+Once a contract is signed in DocuSign, change the Salesforce opportunity stage to "Closed Won". This triggers an automated Slack notification to #customer-success, who will schedule the kickoff call within 48 hours.
