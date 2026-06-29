@@ -1,22 +1,14 @@
 import os
-
-from torch.package import ObjMismatchError
-from watchdog.observers import Observer
-
 from download_onnx import ONNXEmbedder
 
 model=ONNXEmbedder()
 
-from database import init_db,DB_PATH
+from database import init_db,DB_PATH,get_conn
 
 import numpy as np
 
 if not os.path.isfile(DB_PATH):
     init_db()
-
-from file_watcher import start_file_watcher
-watcher=start_file_watcher(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"),model)
-
 
 '''
 from indexer import run_indexer
@@ -113,15 +105,82 @@ def search_engine_callback(query):
         """
 
 import sys
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu
+from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor
+from PySide6.QtCore import Qt
+
+def create_status_icon(color_hex):
+    pixmap = QPixmap(24, 24)
+    pixmap.fill(Qt.transparent)
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.Antialiasing)
+    painter.setBrush(QColor(color_hex))
+    painter.setPen(Qt.NoPen)
+    painter.drawEllipse(4, 4, 16, 16)
+    painter.end()
+    return QIcon(pixmap)
+
+
 if __name__=="__main__":
     app=QApplication(sys.argv)
-    app.aboutToQuit.connect(watcher.stop)
-    print("\n🛑 Stopping file watcher...")
-    print("👋 System stopped safely.")
+    app.setQuitOnLastWindowClosed(False)
+    idle_icon=create_status_icon("#30D158")
+    indexing_icon=create_status_icon("#FF9500")
+
+    from indexer import index_first_run
+    is_first_run = True
+    with get_conn() as temp_conn:
+        cursor = temp_conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM docs")
+        if cursor.fetchone()[0] > 0:
+            is_first_run = False
+    start_icon=indexing_icon if is_first_run else idle_icon
+    tray = QSystemTrayIcon(start_icon, parent=app)
+    tray.setToolTip("Terminal AI Assistant: Indexing changes..." if is_first_run else "Terminal AI Assistant: Idle")
+    tray.show()
+    app.processEvents()
+    if is_first_run:
+        print("🚀 First-time startup detected. Indexing entire folder...")
+        index_first_run(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"), model)
+        tray.setIcon(idle_icon)
+        tray.setToolTip("Terminal AI Assistant: Idle")
+        print("✨ First-time indexing complete.")
+
+    from file_watcher import start_file_watcher
+    watcher, handler = start_file_watcher(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"), model)
+
+
     widget=SearchWidget()
     widget.search_callback=search_engine_callback
-    widget.show()
+    tray.activated.connect(lambda reason: widget.toggle_visibility() if reason == QSystemTrayIcon.Trigger else None)
+    menu = QMenu()
+    show_action = menu.addAction("Show Search Widget")
+    show_action.triggered.connect(widget.toggle_visibility)
+    quit_action = menu.addAction("Exit App")
+
+    def safe_quit():
+        if watcher:
+            print("\n🛑 Stopping file watcher...")
+            watcher.stop()
+            print("👋 System stopped safely.")
+        app.quit()
+
+
+    quit_action.triggered.connect(safe_quit)
+    tray.setContextMenu(menu)
+    tray.show()
+    if handler:
+        handler.signals.indexing_started.connect(lambda: (
+            tray.setIcon(indexing_icon),
+            tray.setToolTip("Terminal AI Assistant: Indexing changes...")
+        ))
+        handler.signals.indexing_finished.connect(lambda: (
+            tray.setIcon(idle_icon),
+            tray.setToolTip("Terminal AI Assistant: Idle")
+        ))
+
     sys.exit(app.exec())
+
 
 
 

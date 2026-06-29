@@ -74,7 +74,39 @@ def run_indexer(model,path):
         print(f"{path} is not a valid directory")
         return
 '''
-def index_after_modification(file_path,model):
+
+def index_first_run(path,model):
+    if os.path.isdir(path):
+        file_paths = crawler(path)
+        file_paths = list(file_paths)
+        chunk_size = 65536  # 64 kb
+        with get_conn() as temp_conn:
+            for p in file_paths:
+                text = ""  # now whole file text is going to be here, not good for optimzation, need to fix this, later
+                with open(p, "r", encoding="utf-8", errors="ignore") as temp:
+                    while True:
+                        chunk = temp.read(chunk_size)
+                        text += chunk
+                        if not chunk:
+                            break
+                cursor = temp_conn.cursor()
+                parent_path = os.path.basename(os.path.dirname(p))
+                extension = os.path.splitext(p)[1]
+                query = "INSERT INTO docs(file_path,parent_folder,file_extension) VALUES(?,?,?)"
+                cursor.execute(query, (p, parent_path, extension))
+                chun_thres = 0.6  # chunking threshold; can we make it dynamic??
+                text_chunked, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
+                p_docs_id = cursor.lastrowid
+                query = "INSERT INTO chunks(doc_id,chunk_text,chunk_index,vector) VALUES(?,?,?,?)"
+                for i, vec in enumerate(chunk_embed):
+                    cursor.execute(query, (p_docs_id, " ".join(text_chunked[i]), i, vec.astype("float32").tobytes()))
+                temp_conn.commit()
+    else:
+        print(f"{path} is not a valid directory")
+        return
+
+
+def index_after_modification(file_path,model,first_run):
     chunk_size = 65536  # 64 kb
     text=""
     with open(file_path, "r", encoding="utf-8", errors="ignore") as temp:
@@ -85,7 +117,8 @@ def index_after_modification(file_path,model):
                 break
     with get_conn() as temp_conn:
         cursor=temp_conn.cursor()
-        cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
+        if not first_run:
+            cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
         parent_path = os.path.basename(os.path.dirname(file_path))
         extension = os.path.splitext(file_path)[1]
         query = "INSERT INTO docs(file_path,parent_folder,file_extension) VALUES(?,?,?)"
