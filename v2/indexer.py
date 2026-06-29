@@ -3,6 +3,7 @@ import hashlib
 import re
 import numpy as np
 from database import get_conn
+accepted_file_types=(".md",".txt")
 def split_sent(string:str)->list:
     chunks = re.split(r'\n\s*\n|(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s', string)
     return [c.strip() for c in chunks if c.strip()]
@@ -23,7 +24,6 @@ def sem_chunking(model,temp,threshold):
     return temp_chunked,chun_vec
 
 def crawler(path):
-    accepted_file_types=(".md",".txt")
     file_paths=[]
     for root,dir, files in os.walk(path):
         for file in files:
@@ -32,7 +32,7 @@ def crawler(path):
             file_path=os.path.join(root, file)
             file_paths.append(file_path)
     return file_paths
-
+'''
 def run_indexer(model,path):
     if os.path.isdir(path):
         file_paths=crawler(path)
@@ -73,9 +73,39 @@ def run_indexer(model,path):
     else:
         print(f"{path} is not a valid directory")
         return
+'''
+def index_after_modification(file_path,model):
+    chunk_size = 65536  # 64 kb
+    text=""
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as temp:
+        while True:
+            chunk = temp.read(chunk_size)
+            text += chunk
+            if not chunk:
+                break
+    with get_conn() as temp_conn:
+        cursor=temp_conn.cursor()
+        cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
+        parent_path = os.path.basename(os.path.dirname(file_path))
+        extension = os.path.splitext(file_path)[1]
+        query = "INSERT INTO docs(file_path,parent_folder,file_extension) VALUES(?,?,?)"
+        cursor.execute(query, (file_path, parent_path, extension))
+        chun_thres = 0.6  # chunking threshold; can we make it dynamic??
+        text_chunked, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
+        p_docs_id = cursor.lastrowid
+        query = "INSERT INTO chunks(doc_id,chunk_text,chunk_index,vector) VALUES(?,?,?,?)"
+        for i, vec in enumerate(chunk_embed):
+            cursor.execute(query, (p_docs_id, " ".join(text_chunked[i]), i, vec.astype("float32").tobytes()))
+        temp_conn.commit()
+
+def delete_index(file_path):
+    with get_conn() as temp_conn:
+        cursor=temp_conn.cursor()
+        cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
+        temp_conn.commit()
 
 if __name__=="__main__":
     from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-    run_indexer(model,os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"))
+    mdl = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    '''run_indexer(model,os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"))'''
 

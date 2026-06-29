@@ -1,6 +1,5 @@
 from database import get_conn
 import numpy as np
-
 #print("\n--- Best Local Match ---")
 #print(f"File Source: {best_path}")
 #print(f"Similarity Score: {max_sim:.4f}")

@@ -1,4 +1,8 @@
 import os
+
+from torch.package import ObjMismatchError
+from watchdog.observers import Observer
+
 from download_onnx import ONNXEmbedder
 
 model=ONNXEmbedder()
@@ -10,11 +14,16 @@ import numpy as np
 if not os.path.isfile(DB_PATH):
     init_db()
 
+from file_watcher import start_file_watcher
+watcher=start_file_watcher(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"),model)
+
+
+'''
 from indexer import run_indexer
-indexing_needed=0
+indexing_needed=1
 if(indexing_needed):
     run_indexer(model,os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"))
-
+'''
 from train_router import train_and_save_neuron,testing_show
 training_needed=0
 test_show=0
@@ -106,6 +115,9 @@ def search_engine_callback(query):
 import sys
 if __name__=="__main__":
     app=QApplication(sys.argv)
+    app.aboutToQuit.connect(watcher.stop)
+    print("\n🛑 Stopping file watcher...")
+    print("👋 System stopped safely.")
     widget=SearchWidget()
     widget.search_callback=search_engine_callback
     widget.show()

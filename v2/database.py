@@ -19,8 +19,7 @@ def init_db():
     id INTEGER PRIMARY KEY,
     file_path TEXT UNIQUE NOT NULL,
     parent_folder TEXT NOT NULL,
-    file_extension TEXT NOT NULL,
-    file_hash TEXT NOT NULL
+    file_extension TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS chunks(
     id INTEGER PRIMARY KEY ,
