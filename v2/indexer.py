@@ -8,7 +8,7 @@ def split_sent(string:str)->list:
     chunks = re.split(r'\n\s*\n|(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!)\s', string)
     return [c.strip() for c in chunks if c.strip()]
 def sem_chunking(model,temp,threshold):
-    temp=split_sent(temp)
+    '''temp=split_sent(temp)
     temp_embed_list=model.encode(temp)
     similarity_scores=np.sum(temp_embed_list[:-1]*temp_embed_list[1:],axis=1)
     split_arr=[i+1 for i in range(len(similarity_scores)) if similarity_scores[i]<threshold]
@@ -21,7 +21,38 @@ def sem_chunking(model,temp,threshold):
         if(norm>0):
             mean_vec=mean_vec/norm
         chun_vec.append(mean_vec)
-    return temp_chunked,chun_vec
+    return temp_chunked,chun_vec'''
+    sentences=split_sent(temp)
+    sentence_offsets=[]
+    if not sentences:
+        return [],[]
+    pos=0
+    for sent in sentences:
+        start=temp.find(sent,pos)
+        if start==-1:
+            start=pos
+        end=start+len(sent)
+        sentence_offsets.append((start,end))
+        pos=end
+    temp_embed_list=model.encode(sentences)
+    similarity_scores = np.sum(temp_embed_list[:-1] * temp_embed_list[1:], axis=1)
+    split_arr = [i + 1 for i in range(len(similarity_scores)) if similarity_scores[i] < threshold]
+    temp_embed_list = np.split(temp_embed_list, split_arr)
+    chunks_offsets=np.split(sentence_offsets,split_arr)
+    chunk_bounds=[]
+    for offset in chunks_offsets:
+        char_start=int(offset[0][0])
+        char_end=int(offset[-1][1])
+        chunk_bounds.append((char_start,char_end))
+    chun_vec=[]
+    for x in temp_embed_list:
+        mean_vec = np.mean(x, axis=0)
+        norm = np.linalg.norm(mean_vec)
+        if (norm > 0):
+            mean_vec = mean_vec / norm
+        chun_vec.append(mean_vec)
+    return chunk_bounds, chun_vec
+
 
 def crawler(path):
     file_paths=[]
@@ -95,11 +126,17 @@ def index_first_run(path,model):
                 query = "INSERT INTO docs(file_path,parent_folder,file_extension) VALUES(?,?,?)"
                 cursor.execute(query, (p, parent_path, extension))
                 chun_thres = 0.6  # chunking threshold; can we make it dynamic??
-                text_chunked, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
+                chunk_bounds, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
                 p_docs_id = cursor.lastrowid
-                query = "INSERT INTO chunks(doc_id,chunk_text,chunk_index,vector) VALUES(?,?,?,?)"
+                query_chunks= "INSERT INTO chunks(doc_id,char_start,char_end,chunk_index,vector) VALUES(?,?,?,?,?)"
+                query_fts="INSERT INTO chunks_fts(rowid, chunk_text) VALUES(?,?)"
                 for i, vec in enumerate(chunk_embed):
-                    cursor.execute(query, (p_docs_id, " ".join(text_chunked[i]), i, vec.astype("float32").tobytes()))
+                    char_start=chunk_bounds[i][0]
+                    char_end=chunk_bounds[i][1]
+                    cursor.execute(query_chunks, (p_docs_id, char_start,char_end, i, vec.astype("float32").tobytes()))
+                    chunk_id=cursor.lastrowid
+                    chunk_text=text[char_start:char_end]
+                    cursor.execute(query_fts,(chunk_id,chunk_text))
                 temp_conn.commit()
     else:
         print(f"{path} is not a valid directory")
@@ -118,22 +155,30 @@ def index_after_modification(file_path,model,first_run):
     with get_conn() as temp_conn:
         cursor=temp_conn.cursor()
         if not first_run:
+            cursor.execute("DELETE FROM chunks_fts WHERE rowid IN (SELECT id FROM chunks WHERE doc_id = (SELECT id FROM docs WHERE file_path = ?))",(file_path,))
             cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
         parent_path = os.path.basename(os.path.dirname(file_path))
         extension = os.path.splitext(file_path)[1]
         query = "INSERT INTO docs(file_path,parent_folder,file_extension) VALUES(?,?,?)"
         cursor.execute(query, (file_path, parent_path, extension))
         chun_thres = 0.6  # chunking threshold; can we make it dynamic??
-        text_chunked, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
+        chunk_bounds, chunk_embed = sem_chunking(model, text, chun_thres)  # semantic chunking
         p_docs_id = cursor.lastrowid
-        query = "INSERT INTO chunks(doc_id,chunk_text,chunk_index,vector) VALUES(?,?,?,?)"
+        query_chunks = "INSERT INTO chunks(doc_id,char_start,char_end,chunk_index,vector) VALUES(?,?,?,?,?)"
+        query_fts = "INSERT INTO chunks_fts(rowid, chunk_text) VALUES(?,?)"
         for i, vec in enumerate(chunk_embed):
-            cursor.execute(query, (p_docs_id, " ".join(text_chunked[i]), i, vec.astype("float32").tobytes()))
+            char_start = chunk_bounds[i][0]
+            char_end = chunk_bounds[i][1]
+            cursor.execute(query_chunks, (p_docs_id, char_start, char_end, i, vec.astype("float32").tobytes()))
+            chunk_id = cursor.lastrowid
+            chunk_text = text[char_start:char_end]
+            cursor.execute(query_fts, (chunk_id, chunk_text))
         temp_conn.commit()
 
 def delete_index(file_path):
     with get_conn() as temp_conn:
         cursor=temp_conn.cursor()
+        cursor.execute("DELETE FROM chunks_fts WHERE rowid IN (SELECT id FROM chunks WHERE doc_id = (SELECT id FROM docs WHERE file_path = ?))",(file_path,))
         cursor.execute("DELETE FROM docs WHERE file_path =?", (file_path,))
         temp_conn.commit()
 

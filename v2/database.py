@@ -24,11 +24,13 @@ def init_db():
     CREATE TABLE IF NOT EXISTS chunks(
     id INTEGER PRIMARY KEY ,
     doc_id INTEGER NOT NULL,
-    chunk_text TEXT NOT NULL,
+    char_start INTEGER NOT NULL,
+    char_end INTEGER NOT NULL,
     chunk_index INTEGER NOT NULL,
     vector BLOB NOT NULL,
     FOREIGN KEY(doc_id) REFERENCES docs(id) ON DELETE CASCADE
     );
+    CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(chunk_text,content="")
     """
     with get_conn() as temp:
         temp.executescript(schema)

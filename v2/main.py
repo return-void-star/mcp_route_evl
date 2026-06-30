@@ -70,7 +70,7 @@ def search_engine_callback(query):
                   </div>
                 </div>
                 """
-    max_sim,best_string,best_path=search_locally(query_vec)
+    max_sim,best_string,best_path=search_locally(query_vec,query)
     local_threshold=0.20
 
     if(max_sim<local_threshold):
