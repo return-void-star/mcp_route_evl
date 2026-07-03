@@ -36,7 +36,7 @@ class SearchIconWidget(QWidget):
 
 class GlobalHotkeyThread(QThread):
     """
-    Listens for Alt+Space (Option+Space on macOS) globally to toggle widget visibility.
+    Listens for Cmd+Shift+Space globally to toggle widget visibility.
     """
     toggle_signal = Signal()
 
@@ -44,16 +44,16 @@ class GlobalHotkeyThread(QThread):
         try:
             from pynput import keyboard
         except ImportError:
-            print("[Info] pynput is not installed. Global hotkey (Alt+Space) will not work.")
+            print("[Info] pynput is not installed. Global hotkey (Cmd+Shift+Space) will not work.")
             print("[Info] To enable global hotkey, run: pip install pynput")
             return
 
         def on_activate():
             self.toggle_signal.emit()
 
-        # Listen for Alt + Space (maps to Option + Space on macOS)
+        # Listen for Cmd + Shift + Space on macOS (or Win + Shift + Space on Windows)
         try:
-            with keyboard.GlobalHotKeys({'<alt>+<space>': on_activate}) as h:
+            with keyboard.GlobalHotKeys({'<cmd>+<shift>+<space>': on_activate}) as h:
                 h.join()
         except Exception as e:
             print(f"[Warning] Failed to start global hotkey listener: {e}")
