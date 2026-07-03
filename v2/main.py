@@ -1,4 +1,6 @@
 import os
+import webbrowser
+
 from download_onnx import ONNXEmbedder
 
 model=ONNXEmbedder()
@@ -30,28 +32,6 @@ n_data= np.load(neuron_path)
 weights = n_data["w"]
 bias = n_data["b"]
 
-'''
-from router import predict_cloud_prob
-from retrieval import search_locally
-def prompt_query():
-    return input("Enter ur query: ")
-query_string=prompt_query()
-query_vec=model.encode(query_string)
-escalate_prob=predict_cloud_prob(query_vec,weights,bias)
-if(escalate_prob>=0.5):
-    print("\n--> [ROUTING] Escalating to cloud api (Complex Query)...")
-else:
-    print("\n--> [ROUTING] Processing locally...")
-    max_sim, best_string, best_path = search_locally(query_vec)
-    local_threshold = 0.25
-    if (max_sim < local_threshold):
-        print(f"\n--> [ROUTING] Escalating to cloud api (Low similarity confidence: {max_sim:.4f})...")
-    else:
-        print("\n--- Best Local Match ---")
-        print(f"File Source: {best_path}")
-        print(f"Similarity Score: {max_sim:.4f}")
-        print(f"Content: {best_string}\n")'''
-
 from router import predict_cloud_prob
 from retrieval import search_locally
 from PySide6.QtWidgets import QApplication
@@ -60,57 +40,151 @@ from gui import SearchWidget
 def search_engine_callback(query):
     query_vec=model.encode(query)
     escalation_prob=predict_cloud_prob(query_vec,weights,bias)
-
+    icons_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
+    chatgpt_logo = f"file://{os.path.join(icons_dir, 'chatgpt.png')}"
+    gemini_logo = f"file://{os.path.join(icons_dir, 'gemini.png')}"
+    claude_logo = f"file://{os.path.join(icons_dir, 'claude.png')}"
+    system_font="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"
     if(escalation_prob>=0.5):
-        return """
-                <div style='background-color: rgba(10, 132, 255, 0.12); border: 1px solid rgba(10, 132, 255, 0.25); border-radius: 8px; padding: 14px;'>
-                  <div style='color: #0A84FF; font-weight: 600; font-size: 14px; font-family: .AppleSystemUIFont, sans-serif;'>☁️ Escalating to Cloud AI</div>
-                  <div style='color: #CCCCCC; font-size: 13px; font-family: .AppleSystemUIFont, sans-serif; margin-top: 6px; line-height: 1.4;'>
-                    This is a complex query requiring synthetic reasoning. Routing to cloud model...
-                  </div>
-                  <div style='margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;'>
-                    <a href='action://correct_routing' style='color: #8E8E93; font-size: 11px; text-decoration: none; font-family: sans-serif; font-weight: bold;'>🔄 Reroute: Process Locally</a>
-                  </div>
-                </div>
+        return f"""
+                        <div style='{system_font} padding: 2px;'>
+                          <div style='color: #8E8E93; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px;'>☁️ Cloud Escalation Actions</div>
 
-                """
+                          <table width='100%' border='0' cellspacing='0' cellpadding='4'>
+                            <!-- ChatGPT Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{chatgpt_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/chatgpt" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask ChatGPT</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥1
+                              </td>
+                            </tr>
+
+                            <tr><td height="10"></td></tr>
+
+                            <!-- Gemini Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{gemini_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/gemini" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Gemini</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥2
+                              </td>
+                            </tr>
+
+                            <tr><td height="10"></td></tr>
+
+                            <!-- Claude Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{claude_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/claude" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Claude</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥3
+                              </td>
+                            </tr>
+                          </table>
+                          <div style='border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; margin-top: 14px;'>
+                            <a href='action://correct_routing' style='color: #8E8E93; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>🔄 Reroute: Process locally</a>
+                          </div>
+                        </div>
+                        """
+
     max_sim,best_string,best_path=search_locally(query_vec,query)
     local_threshold=0.25
 
     if(max_sim<local_threshold):
         return f"""
-                <div style='background-color: rgba(255, 69, 58, 0.12); border: 1px solid rgba(255, 69, 58, 0.25); border-radius: 8px; padding: 14px;'>
-                  <div style='color: #FF453A; font-weight: 600; font-size: 14px; font-family: .AppleSystemUIFont, sans-serif;'>⚠️ Low Confidence Local Search ({max_sim:.4f})</div>
-                  <div style='color: #CCCCCC; font-size: 13px; font-family: .AppleSystemUIFont, sans-serif; margin-top: 6px; line-height: 1.4;'>
-                    No matching local knowledge was found in the database. Escalating to cloud model...
-                  </div>
-                  <div style='margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;'>
-                    <a href='action://correct_routing' style='color: #8E8E93; font-size: 11px; text-decoration: none; font-family: sans-serif; font-weight: bold;'>☁️ Reroute: Escalate to Cloud</a>
-                  </div>
-                </div>
-                """
+                        <div style='{system_font} padding: 2px;'>
+                          <div style='color: #FF453A; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px;'>⚠️ Low Confidence Local Match ({max_sim:.4f})</div>
+                          <div style='color: #8E8E93; font-size: 13px; margin-bottom: 14px;'>No matching local knowledge. Escalate to:</div>
+
+                          <table width='100%' border='0' cellspacing='0' cellpadding='4'>
+                            <!-- ChatGPT Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{chatgpt_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/chatgpt" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask ChatGPT</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥1
+                              </td>
+                            </tr>
+
+                            <tr><td height="10"></td></tr>
+
+                            <!-- Gemini Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{gemini_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/gemini" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Gemini</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥2
+                              </td>
+                            </tr>
+
+                            <tr><td height="10"></td></tr>
+
+                            <!-- Claude Row -->
+                            <tr>
+                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                                <img src='{claude_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
+                                <a href="action://escalate/claude" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Claude</a>
+                              </td>
+                              <td align='right' style='font-size: 11px; font-weight: bold; font-family: monospace; color: #8E8E93;'>
+                                ⌥3
+                              </td>
+                            </tr>
+                          </table>
+                          <div style='border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; margin-top: 14px;'>
+                            <a href='action://correct_routing' style='color: #8E8E93; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>☁️ Reroute: Escalate to Cloud</a>
+                          </div>
+                        </div>
+                        """
 
     file_name=os.path.basename(best_path) if best_path else "Unknown File"
     clean_text=best_string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
     return f"""
-        <div style='font-family: .AppleSystemUIFont, sans-serif;'>
-          <div style='margin-bottom: 10px;'>
-            <span style='color: #8E8E93; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;'>LOCAL MATCH</span>
-            <span style='color: #30D158; font-size: 11px; margin-left: 8px; font-weight: 600; background-color: rgba(48, 209, 88, 0.15); padding: 2px 6px; border-radius: 4px;'>Score: {max_sim:.4f}</span>
-          </div>
-          <div style='color: #0A84FF; font-size: 16px; font-weight: 600; margin-bottom: 4px;'>
-            📄 {file_name}
-          </div>
-          <div style='color: #8E8E93; font-size: 12px; margin-bottom: 14px;'>
-            Source: <code style='background-color: rgba(255,255,255,0.06); padding: 2px 5px; border-radius: 4px;'>{best_path}</code>
-          </div>
-          <div style='background-color: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 14px; color: #E5E5E5; font-size: 13.5px; line-height: 1.5;'>{clean_text}</div>
-          
-          <div style='margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;'>
-            <a href='action://correct_routing' style='color: #8E8E93; font-size: 11px; text-decoration: none; font-family: sans-serif; font-weight: bold;'>☁️ Reroute: Escalate to Cloud</a>
-          </div>
-        </div>
-        """
+            <div style='{system_font}'>
+              <div style='margin-bottom: 10px;'>
+                <span style='color: #8E8E93; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.8px;'>LOCAL MATCH</span>
+                <span style='color: #30D158; font-size: 12px; margin-left: 8px; font-weight: 600; background-color: #172517; padding: 2px 6px; border-radius: 4px;'>Score: {max_sim:.4f}</span>
+              </div>
+              <div style='color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 4px;'>
+                📄 {file_name}
+              </div>
+              <div style='color: #8E8E93; font-size: 12px; margin-bottom: 14px;'>
+                Source: <code style='background-color: #1E1E1E; padding: 2px 5px; border-radius: 4px;'>{best_path}</code>
+              </div>
+              <div style='background-color: #1E1E1E; border: 1px solid #2D2D2D; border-radius: 8px; padding: 14px; color: #E5E5E5; font-size: 14px; line-height: 1.5;'>{clean_text}</div>
+
+              <table border='0' cellspacing='0' cellpadding='0' style='margin-top: 14px; border-top: 1px solid #2D2D2D; padding-top: 10px; margin-bottom: 8px; width: 100%;'>
+                <tr>
+                  <td align='left' style='font-size: 13px; font-weight: 600; color: #8E8E93; {system_font}'>
+                    ☁️ Ask Cloud:
+                    <img src='{chatgpt_logo}' width='16' height='16' align='middle' style='margin-left: 8px; margin-right: 4px;'>
+                    <a href='action://escalate/chatgpt' style='color: #FFFFFF; text-decoration: none; {system_font} vertical-align: middle; margin-right: 12px;'>ChatGPT</a>
+
+                    <img src='{gemini_logo}' width='16' height='16' align='middle' style='margin-right: 4px;'>
+                    <a href='action://escalate/gemini' style='color: #FFFFFF; text-decoration: none; {system_font} vertical-align: middle; margin-right: 12px;'>Gemini</a>
+
+                    <img src='{claude_logo}' width='16' height='16' align='middle' style='margin-right: 4px;'>
+                    <a href='action://escalate/claude' style='color: #FFFFFF; text-decoration: none; {system_font} vertical-align: middle;'>Claude</a>
+                  </td>
+                </tr>
+              </table>
+
+              <div style='border-top: 1px solid #2D2D2D; padding-top: 8px;'>
+                <a href='action://correct_routing' style='color: #8E8E93; font-size: 12px; text-decoration: none; {system_font} font-weight: bold;'>☁️ Reroute: Escalate to Cloud</a>
+              </div>
+            </div>
+            """
+
 
 import sys
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
@@ -146,6 +220,19 @@ def routing_correction(query):
     weights=n_data["w"]
     bias=n_data["b"]
 
+import urllib.parse
+def escalate_callback(query,provider):
+    query_vec=model.encode(query)
+    sim,best_string,best_path=search_locally(query_vec,query)
+    if best_string and sim>0.1:
+        clean_context=best_string.strip()
+        prompt=f"Using this local context from my computer:\n---\n{clean_context}\n---\n\nAnswer this query: {query}"
+    else:
+        prompt=query
+    encoded_prompt=urllib.parse.quote(prompt)
+    urls={"chatgpt": f"https://chatgpt.com/?q={encoded_prompt}","gemini": f"https://gemini.google.com/app?q={encoded_prompt}","claude": f"https://claude.ai/new?q={encoded_prompt}"}
+    url=urls.get(provider,"https://chatgpt.com")
+    webbrowser.open(url)
 
 if __name__=="__main__":
     app=QApplication(sys.argv)
@@ -179,6 +266,7 @@ if __name__=="__main__":
     widget=SearchWidget()
     widget.search_callback=search_engine_callback
     widget.routing_correction_callback=routing_correction
+    widget.escalate_callback=escalate_callback
     tray.activated.connect(lambda reason: widget.toggle_visibility() if reason == QSystemTrayIcon.Trigger else None)
     menu = QMenu()
     show_action = menu.addAction("Show Search Widget")

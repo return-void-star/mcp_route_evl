@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal, QThread, QEvent, QTimer
 from PySide6.QtGui import QColor, QFont, QShortcut, QKeySequence, QPainter, QPen
+from PySide6.QtCore import QUrl
 
 class SearchIconWidget(QWidget):
     """
@@ -116,6 +117,11 @@ class SearchWidget(QFrame):
         self.result_viewer.setFont(QFont(".AppleSystemUIFont", 14))
         self.result_viewer.setOpenLinks(False)
         self.result_viewer.anchorClicked.connect(self.on_anchor_clicked)
+        
+        # Set search path for local icons
+        icons_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
+        self.result_viewer.setSearchPaths([icons_path])
+        
         self.result_viewer.hide()
         self.container_layout.addWidget(self.result_viewer)
         
@@ -253,7 +259,17 @@ class SearchWidget(QFrame):
         self.result_viewer.setHtml(html_content)
         self.separator.show()
         self.result_viewer.show()
-        self.setFixedSize(720, 400)
+        
+        # Force a document layout pass by setting the text wrap width
+        self.result_viewer.document().setTextWidth(658)
+        doc_height = int(self.result_viewer.document().size().height())
+        
+        # Base height for input area + separator + margins is about 96px.
+        # Add document height plus a small padding.
+        target_height = 96 + doc_height + 15
+        target_height = max(96, min(target_height, 480))
+        
+        self.setFixedSize(720, target_height)
 
     def clear_results(self):
         """Call this to hide the results pane and collapse the window back to compact."""
@@ -281,13 +297,55 @@ class SearchWidget(QFrame):
         else:
             self.clear_results()
 
+    def keyPressEvent(self, event):
+        # Option/Alt + 1, 2, 3 shortcuts to trigger cloud options
+        if event.modifiers() & Qt.AltModifier:
+            if event.key() == Qt.Key_1:
+                self.on_anchor_clicked(QUrl("action://escalate/chatgpt"))
+                event.accept()
+                return
+            elif event.key() == Qt.Key_2:
+                self.on_anchor_clicked(QUrl("action://escalate/gemini"))
+                event.accept()
+                return
+            elif event.key() == Qt.Key_3:
+                self.on_anchor_clicked(QUrl("action://escalate/claude"))
+                event.accept()
+                return
+        super().keyPressEvent(event)
+
     def on_anchor_clicked(self, url):
-        if url.toString() == "action://correct_routing":
+        url_str = url.toString()
+        if url_str == "action://correct_routing":
             query = self.search_input.text().strip()
             if query and self.routing_correction_callback:
                 self.routing_correction_callback(query)
                 self.execute_search()
+        elif url_str.startswith("action://escalate/"):
+            provider = url_str.split("/")[-1]
+            query = self.search_input.text().strip()
+            if query and self.escalate_callback:
+                # Update GUI to show progress
+                self.show_results(f"""
+                    <div style='font-family: .AppleSystemUIFont, sans-serif; padding: 14px; background-color: rgba(255,255,255,0.04); border-radius: 8px;'>
+                      <div style='color: #0A84FF; font-weight: 600; font-size: 14px;'>🚀 Sending to Cloud</div>
+                      <div style='color: #CCCCCC; font-size: 13px; margin-top: 6px;'>
+                        Opening <b>{provider.capitalize()}</b> with your query and local memory pre-loaded...
+                      </div>
+                    </div>
+                """)
+                self.escalate_callback(query, provider)
 
+        def keyPressEvent(self, event):
+            # Bind Option + 1/2/3 to escalate to providers
+            if event.modifiers() & Qt.AltModifier:  # AltModifier is Option on Mac
+                if event.key() == Qt.Key_1:
+                    self.on_anchor_clicked(QUrl("action://escalate/chatgpt"))
+                elif event.key() == Qt.Key_2:
+                    self.on_anchor_clicked(QUrl("action://escalate/gemini"))
+                elif event.key() == Qt.Key_3:
+                    self.on_anchor_clicked(QUrl("action://escalate/claude"))
+            super().keyPressEvent(event)
 if __name__ == "__main__":
     print("Starting Terminal AI Assistant (Spotlight Widget)...")
     print("Press Esc to hide, and Ctrl+Q (or Ctrl+W) to quit.")
