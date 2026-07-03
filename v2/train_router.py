@@ -10,6 +10,8 @@ def train_and_save_neuron(n_path,model,epochs,lamda,lr):
         reader=csv.reader(file)
         header=next(reader)
         for row in reader:
+            if not row or len(row)<2:
+                continue
             queries.append(row[0])
             labels.append(row[1])
     labels=np.array(labels,dtype=np.int32)
@@ -57,8 +59,6 @@ def testing_show(n_path,model):
     correct_or_not=(output>=0.5).astype(int)
     correct=np.sum(correct_or_not==test_labels)
     print("accuracy: ",correct/test_labels.size)
-
-
 
 
 

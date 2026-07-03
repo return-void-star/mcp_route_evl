@@ -2,13 +2,10 @@ import os
 import webbrowser
 
 from download_onnx import ONNXEmbedder
-
 model=ONNXEmbedder()
 
 from database import init_db,DB_PATH,get_conn
-
 import numpy as np
-
 if not os.path.isfile(DB_PATH):
     init_db()
 
@@ -19,9 +16,13 @@ if(indexing_needed):
     run_indexer(model,os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),"data"))
 '''
 from train_router import train_and_save_neuron,testing_show
-training_needed=0
+neuron_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), "router_config.npz")
+if not os.path.exists(neuron_path):
+    training_needed=1
+else:
+    training_needed=0
 test_show=0
-neuron_path="router_config.npz"
+
 if(training_needed):
     train_and_save_neuron(neuron_path,model,500,0.1,0.3)
 if(test_show):
@@ -53,7 +54,7 @@ def search_engine_callback(query):
                           <table width='100%' border='0' cellspacing='0' cellpadding='4'>
                             <!-- ChatGPT Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{chatgpt_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/chatgpt" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask ChatGPT</a>
                               </td>
@@ -66,7 +67,7 @@ def search_engine_callback(query):
 
                             <!-- Gemini Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{gemini_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/gemini" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Gemini</a>
                               </td>
@@ -79,7 +80,7 @@ def search_engine_callback(query):
 
                             <!-- Claude Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{claude_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/claude" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Claude</a>
                               </td>
@@ -89,7 +90,7 @@ def search_engine_callback(query):
                             </tr>
                           </table>
                           <div style='border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; margin-top: 14px;'>
-                            <a href='action://correct_routing' style='color: #8E8E93; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>🔄 Reroute: Process locally</a>
+                            <a href='action://correct_routing' style='color: #FFFFFF; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>🔄 Reroute: Process locally</a>
                           </div>
                         </div>
                         """
@@ -106,7 +107,7 @@ def search_engine_callback(query):
                           <table width='100%' border='0' cellspacing='0' cellpadding='4'>
                             <!-- ChatGPT Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{chatgpt_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/chatgpt" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask ChatGPT</a>
                               </td>
@@ -119,7 +120,7 @@ def search_engine_callback(query):
 
                             <!-- Gemini Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{gemini_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/gemini" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Gemini</a>
                               </td>
@@ -132,7 +133,7 @@ def search_engine_callback(query):
 
                             <!-- Claude Row -->
                             <tr>
-                              <td align='left' style='font-size: 14px; font-weight: 500;'>
+                              <td align='left' style='font-size: 14px;'>
                                 <img src='{claude_logo}' width='18' height='18' align='middle' style='margin-right: 8px;'>
                                 <a href="action://escalate/claude" style="text-decoration: none; color: #FFFFFF; {system_font} vertical-align: middle;">Ask Claude</a>
                               </td>
@@ -142,7 +143,7 @@ def search_engine_callback(query):
                             </tr>
                           </table>
                           <div style='border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; margin-top: 14px;'>
-                            <a href='action://correct_routing' style='color: #8E8E93; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>☁️ Reroute: Escalate to Cloud</a>
+                            <a href='action://correct_routing' style='color: #FFFFFF; font-size: 12px; text-decoration: none; {system_font} font-weight: 600;'>☁️ Reroute: Escalate to Cloud</a>
                           </div>
                         </div>
                         """
@@ -156,7 +157,7 @@ def search_engine_callback(query):
                 <span style='color: #30D158; font-size: 12px; margin-left: 8px; font-weight: 600; background-color: #172517; padding: 2px 6px; border-radius: 4px;'>Score: {max_sim:.4f}</span>
               </div>
               <div style='color: #FFFFFF; font-size: 16px; font-weight: 600; margin-bottom: 4px;'>
-                📄 {file_name}
+                📄 <a href="action://open_file/{best_path}" style="text-decoration: none; color: #FFFFFF;">{file_name}</a>
               </div>
               <div style='color: #8E8E93; font-size: 12px; margin-bottom: 14px;'>
                 Source: <code style='background-color: #1E1E1E; padding: 2px 5px; border-radius: 4px;'>{best_path}</code>
@@ -198,7 +199,7 @@ def create_status_icon(color_hex):
     painter.setRenderHint(QPainter.Antialiasing)
     painter.setBrush(QColor(color_hex))
     painter.setPen(Qt.NoPen)
-    painter.drawEllipse(4, 4, 16, 16)
+    painter.drawEllipse(5, 5, 6, 6)
     painter.end()
     return QIcon(pixmap)
 
