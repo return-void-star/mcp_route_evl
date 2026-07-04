@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QGraphicsOpacityEffect
 )
 from PySide6.QtCore import Qt, Signal, QThread, QEvent, QTimer, QPropertyAnimation, QEasingCurve, QVariantAnimation
+from PySide6.QtNetwork import QLocalServer
 from PySide6.QtGui import QColor, QFont, QShortcut, QKeySequence, QPainter, QPen, QPixmap, QIcon
 from PySide6.QtCore import QUrl
 
@@ -62,9 +63,23 @@ class SearchWidget(QFrame):
     def __init__(self):
         super().__init__()
         
-        # 1. Initialize safety flags and state variables first
+        # 1. Initialize safety flags and state variables
         self._ignore_hide = False
         self.hotkey_thread = None
+
+        # Set macOS activation policy to Accessory (overlay on top, no dock icon, no space switch)
+        if sys.platform == "darwin":
+            try:
+                import AppKit
+                AppKit.NSApp.setActivationPolicy_(AppKit.NSApplicationActivationPolicyAccessory)
+            except ImportError:
+                pass
+        
+        # Setup local socket server for single-instance detection
+        self.local_server = QLocalServer(self)
+        self.local_server.removeServer("ai_asst_shortcut")
+        self.local_server.listen("ai_asst_shortcut")
+        self.local_server.newConnection.connect(self.handle_local_connection)
         
         # 2. Window configuration
         self.setWindowFlag(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
@@ -225,12 +240,14 @@ class SearchWidget(QFrame):
         self.center_on_screen()
         
         # Initialize and start global hotkey listener thread
-        self.hotkey_thread = GlobalHotkeyThread()
-        self.hotkey_thread.toggle_signal.connect(self.toggle_visibility)
-        self.hotkey_thread.start()
+        # self.hotkey_thread = GlobalHotkeyThread()
+        # self.hotkey_thread.toggle_signal.connect(self.toggle_visibility)
+        # self.hotkey_thread.start()
         
         # Install application-level event filter for Dock icon activations
         QApplication.instance().installEventFilter(self)
+        self.installEventFilter(self)
+        self.search_input.installEventFilter(self)
         self._ignore_hide = False
 
         # Initialize callbacks
@@ -531,27 +548,50 @@ class SearchWidget(QFrame):
         self.search_input.setFocus()
 
     def toggle_visibility(self):
-        if self.isVisible() and self.isActiveWindow():
-            self.hide()
-        else:
-            self._ignore_hide = True
-            self.show()
-            self.raise_()
-            self.activateWindow()
-            self.search_input.setFocus()
-            self.search_input.selectAll()
-            QTimer.singleShot(300, self._clear_ignore_hide)
+        # If it's visible AND we are currently focused on it, hide it.
+        # Otherwise (even if it's technically visible but on another macOS Desktop Space or behind another app), show it.
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S.%f")
+        log_msg = f"{timestamp} - toggle_visibility called. isVisible={self.isVisible()}, isActiveWindow={self.isActiveWindow()}\\n"
+        # We completely abandon the 'toggle' concept for the shortcut.
+        # If the user presses the shortcut, they ALWAYS want to see the search bar.
+        # Hiding is handled purely by clicking away or pressing Esc.
+        self._ignore_hide = True
+        self.show()
+        self.raise_()
+        self.activateWindow()
+        self.search_input.setFocus()
+        self.search_input.selectAll()
+        
+        if sys.platform == "darwin":
+            try:
+                import AppKit
+                AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
+            except ImportError:
+                pass
+                
+        QTimer.singleShot(1000, self._clear_ignore_hide)
+
+
+    def handle_local_connection(self):
+        """Handle incoming local socket connections for single-instance window toggling."""
+        socket = self.local_server.nextPendingConnection()
+        if socket:
+            socket.waitForReadyRead(100)
+            msg = socket.readAll().data()
+            if msg == b"toggle":
+                self.toggle_visibility()
+            socket.disconnectFromServer()
 
     def _clear_ignore_hide(self):
         self._ignore_hide = False
 
     def changeEvent(self, event):
-        if event.type() == QEvent.ActivationChange:
-            if not self.isActiveWindow() and not getattr(self, '_ignore_hide', False):
-                self.hide()
         super().changeEvent(event)
 
     def eventFilter(self, obj, event):
+        from PySide6.QtGui import QCursor
+        
         if event.type() == QEvent.ApplicationActivate:
             self._ignore_hide = True
             self.show()
@@ -559,7 +599,13 @@ class SearchWidget(QFrame):
             self.activateWindow()
             self.search_input.setFocus()
             self.search_input.selectAll()
-            QTimer.singleShot(300, self._clear_ignore_hide)
+            QTimer.singleShot(1000, self._clear_ignore_hide)
+        elif event.type() in (QEvent.ApplicationDeactivate, QEvent.WindowDeactivate):
+            if not getattr(self, '_ignore_hide', False):
+                # If mouse is touching the top menu bar, macOS might steal focus. Ignore it.
+                if QCursor.pos().y() <= 25:
+                    return super().eventFilter(obj, event)
+                self.hide()
         return super().eventFilter(obj, event)
 
     def keyPressEvent(self, event):

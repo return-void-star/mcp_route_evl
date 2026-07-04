@@ -1,5 +1,42 @@
 import os
-import webbrowser
+import sys
+import subprocess
+import socket as pysocket
+
+
+if "--ai-bg-worker" not in sys.argv:
+    temp_dir = os.environ.get('TMPDIR', '/tmp/')
+    socket_path = os.path.join(temp_dir, "ai_asst_shortcut")
+    
+    sock = pysocket.socket(pysocket.AF_UNIX, pysocket.SOCK_STREAM)
+    try:
+        sock.connect(socket_path)
+        sock.sendall(b"toggle")
+        sock.close()
+        sys.exit(0)
+    except Exception as e:
+        with open("/tmp/ai_launcher.log", "a") as f:
+            f.write(f"Failed to connect (error: {e}), spawning new daemon\n")
+            
+    cmd=[sys.executable,__file__,"--ai-bg-worker"]
+    with open(os.devnull,"wb") as devnull:
+        subprocess.Popen(cmd, stdout=devnull, stderr=devnull, stdin=subprocess.DEVNULL, start_new_session=True)
+    import time
+    for _ in range(50):
+        try:
+            sock = pysocket.socket(pysocket.AF_UNIX, pysocket.SOCK_STREAM)
+            sock.connect(socket_path)
+            sock.sendall(b"toggle")
+            sock.close()
+            with open("/tmp/ai_launcher.log", "a") as f:
+                f.write("Successfully sent toggle command to new daemon\n")
+            sys.exit(0)
+        except Exception:
+            time.sleep(0.1)
+    
+    sys.exit(1)
+sys.argv.remove("--ai-bg-worker")
+
 
 from download_onnx import ONNXEmbedder
 model=ONNXEmbedder()
@@ -222,6 +259,7 @@ def routing_correction(query):
     bias=n_data["b"]
 
 import urllib.parse
+import webbrowser
 def escalate_callback(query,provider):
     query_vec=model.encode(query)
     sim,best_string,best_path=search_locally(query_vec,query)
@@ -236,7 +274,9 @@ def escalate_callback(query,provider):
     webbrowser.open(url)
 
 if __name__=="__main__":
-    app=QApplication(sys.argv)
+    app=QApplication.instance()
+    if not app:
+        app=QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
     idle_icon=create_status_icon("#30D158")
     indexing_icon=create_status_icon("#FF9500")
