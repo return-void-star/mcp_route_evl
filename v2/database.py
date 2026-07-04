@@ -30,7 +30,7 @@ def init_db():
     vector BLOB NOT NULL,
     FOREIGN KEY(doc_id) REFERENCES docs(id) ON DELETE CASCADE
     );
-    CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(chunk_text,content="")
+    CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(chunk_text, content='', contentless_delete=1)
     """
     with get_conn() as temp:
         temp.executescript(schema)
